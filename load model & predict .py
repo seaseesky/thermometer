@@ -22,13 +22,15 @@ vincent(ori+'1912057/')
 
 test_img=os.listdir(ori+'1912057/sep/')
 print(test_img)
+dict = {}
 test_list=[]
 for i in range(len(test_img)):
     img0 = cv2.imread(test_img[i])
     img = cv2.resize(img0, (128,128))
-    test_list.append(img)
-    
-x_test = np.array(test_list).astype('float32')/255.
-test_predict = my_model.predict(x_test)
+    #test_list.append(img)
+    #x_test = np.array(test_list).astype('float32')/255.
+    test_predict = my_model.predict(img)
+    if str(test_img[i]).split('.')[0] in  dict:
+
 test_predict_arg = test_predict.argmax(axis=1) # 取預測出來機率最大值
 print(test_predict_arg)

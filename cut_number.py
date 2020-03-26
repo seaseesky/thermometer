@@ -1,7 +1,7 @@
-def vincent(read_dir,save_dir):
+def vincent(read_dir):
 	import os
 	import sys
-	import pandas as pd
+	#import pandas as pd
 	import numpy as np
 	import cv2
 	import matplotlib.pyplot as plt
@@ -9,7 +9,12 @@ def vincent(read_dir,save_dir):
 	#讀取影像資料夾
 	target_path = read_dir
 	#切割後字元存放處
-	path = save_dir
+	try:
+		os.mkdir(target_path+'/sep')
+	except:
+		pass
+	
+	path = target_path+'/sep'
 	files = os.listdir(target_path)
 
 	k=0000
@@ -32,6 +37,7 @@ def vincent(read_dir,save_dir):
 			up_y=np.where(idx==1)[0][-1] #上界
 			down_y=np.where(idx==1)[0][0] #下界
 			rawimg1=rawimg[down_y:up_y,]
+			
 
 			# counting non-zero value by column, x axis
 			col_nz = []
@@ -61,12 +67,12 @@ def vincent(read_dir,save_dir):
 						rm_id.append(record_y[j+1])
 
 			for x in rm_id:
-				 record_y.remove(x)
+					record_y.remove(x)
 
 			for i in range(0,len(record_y)-1):
 				a=binary[down_y:up_y,record_y[i]:record_y[i+1]]
 				a=cv2.resize(a, (56, 56), interpolation=cv2.INTER_CUBIC)
-				img_name= file + str(i) + '.png'
+				img_name= file+ '-'+str(i) 
 				cv2.imwrite(os.path.join(path, img_name), a)	
 		except:
 			print(k,"_","goes wrong!!")

@@ -1,10 +1,8 @@
-def vincent(read_dir):
+def Vincent(read_dir):
 	import os
 	import sys
-	#import pandas as pd
 	import numpy as np
 	import cv2
-	import matplotlib.pyplot as plt
 
 	#讀取影像資料夾
 	target_path = read_dir
@@ -14,14 +12,10 @@ def vincent(read_dir):
 	except:
 		pass
 	
-	path = target_path+'/sep'
+	path = target_path+'/sep/'
 	files = os.listdir(target_path)
 
-	k=0000
 	for file in files:
-		k+=1
-		print("processing_",k)
-		print(file)
 		try:
 			img0 = cv2.imread(target_path + file)
 			img_g = cv2.cvtColor(img0, cv2.COLOR_BGR2GRAY)
@@ -72,7 +66,7 @@ def vincent(read_dir):
 			for i in range(0,len(record_y)-1):
 				a=binary[down_y:up_y,record_y[i]:record_y[i+1]]
 				a=cv2.resize(a, (56, 56), interpolation=cv2.INTER_CUBIC)
-				img_name= file+ '-'+str(i) 
-				cv2.imwrite(os.path.join(path, img_name), a)	
+				save_name= file.split('.')[0]+ '-'+str(i)+'.png' 
+				cv2.imwrite(os.path.join(path, save_name), a)	
 		except:
-			print(k,"_","goes wrong!!")
+			pass

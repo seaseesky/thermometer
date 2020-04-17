@@ -11,11 +11,13 @@ def announcement(word):
 class SubHandler(object):
     def datachange_notification(self, node, val, data):
         # Record condition
+        global count
         try:
             announcement("New data change")
             img = np.array(val)
-            img = np.rot90(img,3)
-            cv2.imwrite("0.png",img)
+            #img = np.rot90(img,3)
+            cv2.imwrite(f"test\{count}.png",img)
+            count+=1
             
         except:
             print('ex   ')
@@ -39,13 +41,12 @@ def main():
 
 if __name__ == "__main__":
     running = True
-    client = Client("opc.tcp://192.168.0.101:4840/")
+    client = Client("opc.tcp://192.168.0.102:4840/")
     try:
         main()
     except:
         pass
     client.disconnect()
-    cv2.destroyAllWindows()
     announcement('End')
     
     

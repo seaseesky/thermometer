@@ -5,58 +5,7 @@ import numpy as np
 import time
 
 
-def Separate(img_g):
-	img_list = []
-	try:
-		#img_g[img_g[:,:] < 230] = 0 
-		#_, binary = cv2.threshold(img_g, 110, 255, cv2.THRESH_BINARY)
-		binary = img_g
-		rawimg = binary - binary[0,1]
 
-		row_nz = []
-		for row in rawimg.tolist():
-			row_nz.append(len(row) - row.count(0))
-		idx=np.array(row_nz)>(max(row_nz)/4) 
-		np.where(idx==1)[0][0],np.where(idx==1)[0][-1]
-		up_y=np.where(idx==1)[0][-1] 
-		down_y=np.where(idx==1)[0][0] 
-		rawimg1=rawimg[down_y:up_y,]
-
-		col_nz = []
-		for col in rawimg1.T.tolist():
-			col_nz.append(len(col) - col.count(0))
-
-		idy=np.not_equal(col_nz,0)
-		record_y=[]
-		for i in range(0,(len(np.where(idy==1)[0])-1)):
-			if(np.where(idy==1)[0][i+1]-np.where(idy==1)[0][i]==1):
-				pass
-			else:
-				record_y.append(np.where(idy==1)[0][i])
-
-		record_y.insert(0,np.where(idy==1)[0][0])
-		record_y.append(np.where(idy==1)[0][-1])
-
-		rm_id=[]
-		if len(record_y)>9:
-			for j in range(0,len(record_y)-1):
-				temp=np.array(col_nz[record_y[j]:record_y[j+1]])
-				if sum(temp>(max(col_nz)/4))==0:
-					rm_id.append(record_y[j+1])
-		
-		for x in rm_id:
-				record_y.remove(x)
-		
-		for i in range(0,len(record_y)-1):
-			a = binary[down_y:up_y,record_y[i]:record_y[i+1]]
-			if min(a.shape)<10:continue
-			a = cv2.resize(a, (32,32), interpolation=cv2.INTER_CUBIC)
-			a = np.reshape(a,(32,32,1))
-			#a = cv2.cvtColor(a,cv2.COLOR_GRAY2BGR)
-			img_list .append(a)
-	except:
-		pass
-	return np.array(img_list).astype('float32')/255.
 
 
 
